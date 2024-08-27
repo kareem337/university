@@ -22,13 +22,6 @@ public class CourseDTO {
 
     public CourseDTO() {}
 
-    public CourseDTO(int courseId, String name, String description, int credit, int authorId) {
-        this.courseId = courseId;
-        this.name = name;
-        this.description = description;
-        this.credit = credit;
-        this.authorId = authorId;
-    }
 
 
     public int getCourseId() {
@@ -67,7 +60,5 @@ public class CourseDTO {
         return authors;
     }
 
-    public void setAuthors(Set<AuthorDTO> authors) {
-        this.authors = authors;
-    }
+
 }

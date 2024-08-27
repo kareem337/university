@@ -24,13 +24,6 @@ public class Course {
     private Set<Author> authors = new HashSet<>();
 
     public Course() {}
-    public Course(int course_id, String name, String description, int credit, int author_id) {
-        this.course_id = course_id;
-        this.name = name;
-        this.description = description;
-        this.credit = credit;
-        this.author_id = author_id;
-    }
 
     public int getCourse_id() {
         return course_id;
@@ -70,10 +63,6 @@ public class Course {
 
     public void setAuthor_id(int author_id) {
         this.author_id = author_id;
-    }
-
-    public Set<Author> getAuthors() {
-        return authors;
     }
 
     public void setAuthors(Set<Author> authors) {

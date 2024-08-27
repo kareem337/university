@@ -1,8 +1,5 @@
 package com.universityapp.university;
 
-import com.universityapp.university.model.Question;
-import com.universityapp.university.model.Quiz;
-import com.universityapp.university.model.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

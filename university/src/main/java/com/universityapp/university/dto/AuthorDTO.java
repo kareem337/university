@@ -12,13 +12,6 @@ public class AuthorDTO {
 
     public AuthorDTO() {}
 
-    public AuthorDTO(int authorId, String name, String birthdate, String email) {
-        this.authorId = authorId;
-        this.name = name;
-        this.birthdate = birthdate;
-        this.email = email;
-
-    }
 
     // Getters and setters
 
