@@ -10,16 +10,11 @@ import org.mapstruct.factory.Mappers;
 public interface CourseMapper {
 
     @Mapping(target = "courseId", source = "course_id")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "credit", source = "credit")
     @Mapping(target = "authorId", source = "author_id")
     @Mapping(target = "authors", ignore = true) //to ignore the looping between course and author sets because the many to many relation
     CourseDTO courseToCourseDTO(Course course);
 
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "description", source = "description")
-    @Mapping(target = "credit", source = "credit")
+
     @Mapping(target = "author_id", source = "authorId")
     Course dtoToCourse(CourseDTO courseDto);
 }
