@@ -1,15 +1,32 @@
 package com.universityapp.university.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.util.Set;
 
 public class CourseDTO {
 
+    @Min(1)
     private int courseId;
+
+    @NotEmpty(message = "Course name cannot be empty")
+    @Size(max = 100, message = "Course name cannot exceed 100 characters")
     private String name;
+
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
+
+    @Min(value = 1, message = "Credit must be at least 1")
     private int credit;
-    private Set<AuthorDTO> authors; // To hold associated authors
+
+    @NotNull(message = "Author ID cannot be null")
+    @Min(value = 1, message = "Author ID must be a positive integer")
     private int authorId;
+
+    private Set<AuthorDTO> authors;
 
     public int getAuthorId() {
         return authorId;

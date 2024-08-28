@@ -102,7 +102,7 @@ class CourseControllerTest {
         Page<CourseDTO> coursePage = new PageImpl<>(Arrays.asList(courseDTO));
         when(courseService.getCoursesWithPagination(anyInt(), anyInt())).thenReturn(coursePage);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/courses/paginated?page=0&size=10"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/courses/paginated?page=1&size=10"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].name").value("Math"));
     }

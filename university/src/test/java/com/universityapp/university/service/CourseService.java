@@ -2,7 +2,12 @@ package com.universityapp.university.service;
 
 import com.universityapp.university.dto.CourseDTO;
 import com.universityapp.university.entity.Course;
+import com.universityapp.university.exception.AuthorNotFoundException;
+import com.universityapp.university.exception.CourseNotFoundException;
+import com.universityapp.university.exception.InvalidDataException;
+import com.universityapp.university.exception.InvalidPaginationException;
 import com.universityapp.university.mapper.CourseMapper;
+import com.universityapp.university.repository.AuthorRepository;
 import com.universityapp.university.repository.CourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +34,9 @@ class CourseServiceTest {
 
     @Mock
     private CourseRepository courseRepository;
+
+    @Mock
+    private AuthorRepository authorRepository;
 
     @Mock
     private CourseMapper courseMapper;
@@ -83,16 +91,68 @@ class CourseServiceTest {
 
     @Test
     void testGetCourseById_NotFound() {
+        // Mock the repository to return an empty Optional
         when(courseRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        CourseDTO foundCourseDTO = courseService.getCourseById(1);
+        // Verify that the CourseNotFoundException is thrown
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> {
+            courseService.getCourseById(234);
+        });
 
-        assertNull(foundCourseDTO);
-        verify(courseRepository, times(1)).findById(1);
+        // Check that the exception message is as expected
+        assertEquals("Course not found with id: 234", exception.getMessage());
+
+        // Verify that the repository was called once
+        verify(courseRepository, times(1)).findById(234);
+    }
+
+    @Test
+    void testCreateCourse_NameInvalid() {
+        courseDTO.setName(null); // or set an empty string
+
+        Exception exception = assertThrows(InvalidDataException.class, () -> {
+            courseService.createCourse(courseDTO);
+        });
+
+        assertEquals("Course name cannot be null or empty.", exception.getMessage());
+    }
+
+    @Test
+    void testCreateCourse_DescriptionInvalid() {
+        courseDTO.setDescription(null); // or set an empty string
+
+        Exception exception = assertThrows(InvalidDataException.class, () -> {
+            courseService.createCourse(courseDTO);
+        });
+
+        assertEquals("Course description cannot be null or empty.", exception.getMessage());
+    }
+
+    @Test
+    void testCreateCourse_CreditInvalid() {
+        courseDTO.setCredit(0); // or set a negative value
+
+        Exception exception = assertThrows(InvalidDataException.class, () -> {
+            courseService.createCourse(courseDTO);
+        });
+
+        assertEquals("Credit must be greater than 0.", exception.getMessage());
+    }
+
+    @Test
+    void testCreateCourse_AuthorNotFound() {
+        when(authorRepository.existsById(anyInt())).thenReturn(false);
+
+        Exception exception = assertThrows(InvalidDataException.class, () -> {
+            courseService.createCourse(courseDTO);
+        });
+
+        assertEquals("Author ID does not exist.", exception.getMessage());
     }
 
     @Test
     void testCreateCourse() {
+        when(authorRepository.existsById(anyInt())).thenReturn(true);
         lenient().when(courseMapper.dtoToCourse(any(CourseDTO.class))).thenReturn(course);
         lenient().when(courseRepository.save(any(Course.class))).thenReturn(course);
         lenient().when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
@@ -105,7 +165,34 @@ class CourseServiceTest {
     }
 
     @Test
+    void testUpdateCourse_AuthorNotFound() {
+
+        int courseId = 1;
+        CourseDTO updatedCourseDTO = new CourseDTO();
+        updatedCourseDTO.setName("Updated Math");
+        updatedCourseDTO.setDescription("Updated Description");
+        updatedCourseDTO.setCredit(3);
+        updatedCourseDTO.setAuthorId(999);
+
+
+        when(courseRepository.findById(courseId)).thenReturn(Optional.of(course));
+        when(authorRepository.existsById(anyInt())).thenReturn(false);
+
+
+        Exception exception = assertThrows(AuthorNotFoundException.class, () -> {
+            courseService.updateCourse(courseId, updatedCourseDTO);
+        });
+
+        assertEquals("Author not found with id: 999", exception.getMessage());
+        verify(courseRepository, times(1)).findById(courseId);
+        verify(authorRepository, times(1)).existsById(999);
+        verify(courseRepository, never()).save(any(Course.class));
+    }
+
+
+    @Test
     void testUpdateCourse() {
+        when(authorRepository.existsById(anyInt())).thenReturn(true);
         when(courseRepository.findById(anyInt())).thenReturn(Optional.of(course));
         when(courseRepository.save(any(Course.class))).thenReturn(course);
         when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
@@ -140,6 +227,28 @@ class CourseServiceTest {
         verify(courseRepository, times(1)).existsById(1);
         verify(courseRepository, never()).deleteById(anyInt());
     }
+
+    @Test
+    void testGetCoursesWithPagination_InvalidPagination() {
+        // Test for page less than 0
+        Exception pageException = assertThrows(InvalidPaginationException.class, () -> {
+            courseService.getCoursesWithPagination(-1, 10);
+        });
+        assertEquals("Page and page size must be greater than or equal to 0.", pageException.getMessage());
+
+        // Test for page size less than or equal to 0
+        Exception sizeException = assertThrows(InvalidPaginationException.class, () -> {
+            courseService.getCoursesWithPagination(0, 0);
+        });
+        assertEquals("Page and page size must be greater than or equal to 0.", sizeException.getMessage());
+
+        // Test for both page and page size less than or equal to 0
+        Exception bothException = assertThrows(InvalidPaginationException.class, () -> {
+            courseService.getCoursesWithPagination(-1, -1);
+        });
+        assertEquals("Page and page size must be greater than or equal to 0.", bothException.getMessage());
+    }
+
     @Test
     void testGetCoursesWithPagination() {
         Pageable pageable = PageRequest.of(0, 2);
