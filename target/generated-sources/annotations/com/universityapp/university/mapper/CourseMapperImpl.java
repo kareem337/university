@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-27T18:09:27+0300",
+    date = "2024-08-31T12:44:00+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -34,6 +34,7 @@ public class CourseMapperImpl implements CourseMapper {
         courseDTO.setName( course.getName() );
         courseDTO.setDescription( course.getDescription() );
         courseDTO.setCredit( course.getCredit() );
+        courseDTO.setAuthors( authorSetToAuthorDTOSet( course.getAuthors() ) );
 
         return courseDTO;
     }
@@ -47,12 +48,26 @@ public class CourseMapperImpl implements CourseMapper {
         Course course = new Course();
 
         course.setAuthor_id( courseDto.getAuthorId() );
+        course.setCourse_id( courseDto.getCourseId() );
         course.setName( courseDto.getName() );
         course.setDescription( courseDto.getDescription() );
         course.setCredit( courseDto.getCredit() );
         course.setAuthors( authorDTOSetToAuthorSet( courseDto.getAuthors() ) );
 
         return course;
+    }
+
+    protected Set<AuthorDTO> authorSetToAuthorDTOSet(Set<Author> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<AuthorDTO> set1 = new LinkedHashSet<AuthorDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Author author : set ) {
+            set1.add( authorMapper.authorToAuthorDTO( author ) );
+        }
+
+        return set1;
     }
 
     protected Set<Author> authorDTOSetToAuthorSet(Set<AuthorDTO> set) {

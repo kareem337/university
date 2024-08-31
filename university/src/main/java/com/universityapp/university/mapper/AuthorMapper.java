@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 public interface AuthorMapper {
     @Mapping(target = "authorId", source = "author_id")
     AuthorDTO authorToAuthorDTO(Author author);
-
+    @Mapping(target = "author_id", source = "authorId")
     Author authorDTOToAuthor(AuthorDTO authorDTO);
 }
