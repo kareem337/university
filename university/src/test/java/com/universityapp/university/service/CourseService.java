@@ -91,24 +91,20 @@ class CourseServiceTest {
 
     @Test
     void testGetCourseById_NotFound() {
-        // Mock the repository to return an empty Optional
+
         when(courseRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        // Verify that the CourseNotFoundException is thrown
         CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> {
             courseService.getCourseById(234);
         });
 
-        // Check that the exception message is as expected
         assertEquals("Course not found with id: 234", exception.getMessage());
-
-        // Verify that the repository was called once
         verify(courseRepository, times(1)).findById(234);
     }
 
     @Test
     void testCreateCourse_NameInvalid() {
-        courseDTO.setName(null); // or set an empty string
+        courseDTO.setName(null);
 
         Exception exception = assertThrows(InvalidDataException.class, () -> {
             courseService.createCourse(courseDTO);
@@ -119,7 +115,7 @@ class CourseServiceTest {
 
     @Test
     void testCreateCourse_DescriptionInvalid() {
-        courseDTO.setDescription(null); // or set an empty string
+        courseDTO.setDescription(null);
 
         Exception exception = assertThrows(InvalidDataException.class, () -> {
             courseService.createCourse(courseDTO);
@@ -130,7 +126,7 @@ class CourseServiceTest {
 
     @Test
     void testCreateCourse_CreditInvalid() {
-        courseDTO.setCredit(0); // or set a negative value
+        courseDTO.setCredit(0);
 
         Exception exception = assertThrows(InvalidDataException.class, () -> {
             courseService.createCourse(courseDTO);
@@ -230,19 +226,19 @@ class CourseServiceTest {
 
     @Test
     void testGetCoursesWithPagination_InvalidPagination() {
-        // Test for page less than 0
+
         Exception pageException = assertThrows(InvalidPaginationException.class, () -> {
             courseService.getCoursesWithPagination(-1, 10);
         });
         assertEquals("Page and page size must be greater than or equal to 0.", pageException.getMessage());
 
-        // Test for page size less than or equal to 0
+
         Exception sizeException = assertThrows(InvalidPaginationException.class, () -> {
             courseService.getCoursesWithPagination(0, 0);
         });
         assertEquals("Page and page size must be greater than or equal to 0.", sizeException.getMessage());
 
-        // Test for both page and page size less than or equal to 0
+
         Exception bothException = assertThrows(InvalidPaginationException.class, () -> {
             courseService.getCoursesWithPagination(-1, -1);
         });
