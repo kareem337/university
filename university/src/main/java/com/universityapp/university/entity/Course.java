@@ -9,13 +9,12 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int course_id;
-
     private String name;
     private String description;
     private int credit;
-    private Integer author_id;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "author_course",
             joinColumns = @JoinColumn(name = "course_id"),
@@ -54,14 +53,6 @@ public class Course {
 
     public void setCredit(int credit) {
         this.credit = credit;
-    }
-
-    public int getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(int author_id) {
-        this.author_id = author_id;
     }
 
     public Set<Author> getAuthors() {

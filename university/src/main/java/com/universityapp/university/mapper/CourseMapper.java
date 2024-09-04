@@ -6,15 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 
-@Mapper(componentModel = "spring", uses = AuthorMapper.class)
+@Mapper(componentModel = "spring")
 public interface CourseMapper {
-
-    @Mapping(target = "courseId", source = "course_id")
-    @Mapping(target = "authorId", source = "author_id")
     CourseDTO courseToCourseDTO(Course course);
-
-
-    @Mapping(target = "author_id", source = "authorId")
-    @Mapping(target = "course_id", source = "courseId")
     Course dtoToCourse(CourseDTO courseDto);
 }
