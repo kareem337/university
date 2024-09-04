@@ -1,17 +1,15 @@
 package com.universityapp.university.mapper;
 
-import com.universityapp.university.dto.AuthorDTO;
 import com.universityapp.university.dto.CourseDTO;
-import com.universityapp.university.entity.Author;
 import com.universityapp.university.entity.Course;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-04T16:01:26+0300",
+
+    date = "2024-09-04T13:22:02+0300",
+
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -28,7 +26,6 @@ public class CourseMapperImpl implements CourseMapper {
         courseDTO.setName( course.getName() );
         courseDTO.setDescription( course.getDescription() );
         courseDTO.setCredit( course.getCredit() );
-        courseDTO.setAuthors( authorSetToAuthorDTOSet( course.getAuthors() ) );
 
         return courseDTO;
     }
@@ -130,4 +127,5 @@ public class CourseMapperImpl implements CourseMapper {
 
         return set1;
     }
+
 }

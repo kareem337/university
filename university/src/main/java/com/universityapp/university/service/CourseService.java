@@ -23,12 +23,15 @@ import java.util.stream.Collectors;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+
     private final AuthorRepository authorRepository;
+
     private final CourseMapper courseMapper;
 
     @Autowired
     public CourseService(CourseRepository courseRepository, AuthorRepository authorRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
+
         this.authorRepository = authorRepository;
 
         this.courseMapper = courseMapper;

@@ -3,6 +3,7 @@ package com.universityapp.university.controller;
 import com.universityapp.university.dto.CourseDTO;
 import com.universityapp.university.service.CourseService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
