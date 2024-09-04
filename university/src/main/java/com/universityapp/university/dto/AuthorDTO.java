@@ -8,6 +8,7 @@ public class AuthorDTO {
     private String name;
     private String email;
     private String birthdate;
+    private Set<CourseDTO> courses;
 
     public Set<CourseDTO> getCourses() {
         return courses;
@@ -17,7 +18,7 @@ public class AuthorDTO {
         this.courses = courses;
     }
 
-    private Set<CourseDTO> courses;
+
     public AuthorDTO() {
         this.courses = new HashSet<>();
     }

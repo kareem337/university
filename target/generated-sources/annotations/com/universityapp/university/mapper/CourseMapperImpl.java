@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-04T03:04:32+0300",
+    date = "2024-09-04T16:01:26+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -49,6 +49,19 @@ public class CourseMapperImpl implements CourseMapper {
         return course;
     }
 
+    protected Set<CourseDTO> courseSetToCourseDTOSet(Set<Course> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<CourseDTO> set1 = new LinkedHashSet<CourseDTO>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Course course : set ) {
+            set1.add( courseToCourseDTO( course ) );
+        }
+
+        return set1;
+    }
+
     protected AuthorDTO authorToAuthorDTO(Author author) {
         if ( author == null ) {
             return null;
@@ -56,6 +69,7 @@ public class CourseMapperImpl implements CourseMapper {
 
         AuthorDTO authorDTO = new AuthorDTO();
 
+        authorDTO.setCourses( courseSetToCourseDTOSet( author.getCourses() ) );
         authorDTO.setName( author.getName() );
         authorDTO.setEmail( author.getEmail() );
         authorDTO.setBirthdate( author.getBirthdate() );
@@ -76,6 +90,19 @@ public class CourseMapperImpl implements CourseMapper {
         return set1;
     }
 
+    protected Set<Course> courseDTOSetToCourseSet(Set<CourseDTO> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<Course> set1 = new LinkedHashSet<Course>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( CourseDTO courseDTO : set ) {
+            set1.add( dtoToCourse( courseDTO ) );
+        }
+
+        return set1;
+    }
+
     protected Author authorDTOToAuthor(AuthorDTO authorDTO) {
         if ( authorDTO == null ) {
             return null;
@@ -86,6 +113,7 @@ public class CourseMapperImpl implements CourseMapper {
         author.setName( authorDTO.getName() );
         author.setEmail( authorDTO.getEmail() );
         author.setBirthdate( authorDTO.getBirthdate() );
+        author.setCourses( courseDTOSetToCourseSet( authorDTO.getCourses() ) );
 
         return author;
     }

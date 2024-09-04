@@ -1,10 +1,11 @@
 package com.universityapp.university.service;
 
-import com.universityapp.university.dto.AuthorDTO;
 import com.universityapp.university.dto.CourseDTO;
 import com.universityapp.university.entity.Author;
 import com.universityapp.university.entity.Course;
-import com.universityapp.university.mapper.AuthorMapper;
+import com.universityapp.university.exception.CourseNotFoundException;
+import com.universityapp.university.exception.InvalidDataException;
+import com.universityapp.university.exception.InvalidPaginationException;
 import com.universityapp.university.mapper.CourseMapper;
 import com.universityapp.university.repository.AuthorRepository;
 import com.universityapp.university.repository.CourseRepository;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,13 +26,12 @@ public class CourseService {
     private final AuthorRepository authorRepository;
     private final CourseMapper courseMapper;
 
-
     @Autowired
     public CourseService(CourseRepository courseRepository, AuthorRepository authorRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
         this.authorRepository = authorRepository;
-        this.courseMapper = courseMapper;
 
+        this.courseMapper = courseMapper;
     }
 
     public List<CourseDTO> getAllCourses() {
@@ -44,48 +44,56 @@ public class CourseService {
     public CourseDTO getCourseById(int id) {
         return courseRepository.findById(id)
                 .map(courseMapper::courseToCourseDTO)
-                .orElse(null);
+                .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + id));
     }
 
     public CourseDTO createCourse(CourseDTO courseDTO) {
+        if (courseDTO.getName() == null || courseDTO.getName().isEmpty()) {
+            throw new InvalidDataException("Course name cannot be null or empty.");
+        }
+        if (courseDTO.getDescription() == null || courseDTO.getDescription().isEmpty()) {
+            throw new InvalidDataException("Course description cannot be null or empty.");
+        }
+        if (courseDTO.getCredit() <= 0) {
+            throw new InvalidDataException("Credit must be greater than 0.");
+        }
         Course course = courseMapper.dtoToCourse(courseDTO);
-        courseRepository.save(course);
-        return courseDTO;
+        Course savedCourse = courseRepository.save(course);
+        return courseMapper.courseToCourseDTO(savedCourse);
     }
 
     public CourseDTO updateCourse(int id, CourseDTO updatedCourseDTO) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + id));
 
-        Course existingCourse = courseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Course not found with id: " + id));
-
-        Course mappedCourse = courseMapper.dtoToCourse(updatedCourseDTO);
-
-        if (mappedCourse.getName() != null) {
-            existingCourse.setName(mappedCourse.getName());
+        if (updatedCourseDTO.getName() != null && !updatedCourseDTO.getName().isEmpty()) {
+            course.setName(updatedCourseDTO.getName());
         }
-        if (mappedCourse.getDescription() != null) {
-            existingCourse.setDescription(mappedCourse.getDescription());
+        if (updatedCourseDTO.getDescription() != null) {
+            course.setDescription(updatedCourseDTO.getDescription());
         }
-        if (mappedCourse.getCredit() != 0) {
-            existingCourse.setCredit(mappedCourse.getCredit());
+        if (updatedCourseDTO.getCredit() > 0) {
+            course.setCredit(updatedCourseDTO.getCredit());
+        } else if (updatedCourseDTO.getCredit() < 0) {
+            throw new InvalidDataException("Credit must be greater than 0.");
         }
 
-        Course updatedCourse = courseRepository.save(existingCourse);
+        Course updatedCourse = courseRepository.save(course);
         return courseMapper.courseToCourseDTO(updatedCourse);
     }
 
-
-
-
     public void deleteCourse(int id) {
-        if (courseRepository.existsById(id)) {
-            courseRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Course not found with id: " + id);
+        if (!courseRepository.existsById(id)) {
+            throw new CourseNotFoundException("Course not found with id: " + id);
         }
+        courseRepository.deleteById(id);
     }
 
     public Page<CourseDTO> getCoursesWithPagination(int page, int pageSize) {
+        if (page < 0 || pageSize <= 0) {
+            throw new InvalidPaginationException("Page and page size must be greater than or equal to 0.");
+        }
+
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Course> coursePage = courseRepository.findAll(pageable);
         return coursePage.map(courseMapper::courseToCourseDTO);

@@ -1,16 +1,29 @@
 package com.universityapp.university.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class CourseDTO {
 
 
-    private String name;
-    private String description;
-    private int credit;
-    private Set<AuthorDTO> authors;
 
+    @NotEmpty(message = "Course name cannot be empty")
+    @Size(max = 100, message = "Course name cannot exceed 100 characters")
+    private String name;
+
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
+    private String description;
+
+    @Min(value = 1, message = "Credit must be at least 1")
+    private int credit;
+    @JsonIgnore
+    private Set<AuthorDTO> authors;
 
 
     public CourseDTO() {
@@ -48,4 +61,6 @@ public class CourseDTO {
     public void setAuthors(Set<AuthorDTO> authors) {
         this.authors = authors;
     }
+
+
 }
