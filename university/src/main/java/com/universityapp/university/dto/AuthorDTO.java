@@ -1,5 +1,7 @@
 package com.universityapp.university.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +10,7 @@ public class AuthorDTO {
     private String name;
     private String email;
     private String birthdate;
+    @JsonIgnore
     private Set<CourseDTO> courses;
 
     public Set<CourseDTO> getCourses() {
