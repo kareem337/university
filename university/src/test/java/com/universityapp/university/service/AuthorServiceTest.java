@@ -44,7 +44,7 @@ class AuthorServiceTest {
         author.setBirthdate("9/7/2000");
 
         authorDTO = new AuthorDTO();
-        authorDTO.setAuthorId(1);
+
         authorDTO.setName("kareem");
         authorDTO.setEmail("jkareem@gmail.com");
         authorDTO.setBirthdate("9/7/2000");

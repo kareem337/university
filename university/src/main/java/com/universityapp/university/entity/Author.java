@@ -23,6 +23,13 @@ public class Author {
 
     public Author() {}
 
+    public Author(int author_id, String name, String birthdate, String email) {
+        this.author_id = author_id;
+        this.name = name;
+        this.birthdate = birthdate;
+        this.email = email;
+    }
+
     // Getters and setters
 
     public int getAuthor_id() {
@@ -57,5 +64,12 @@ public class Author {
         this.birthdate = birthdate;
     }
 
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
 }
 

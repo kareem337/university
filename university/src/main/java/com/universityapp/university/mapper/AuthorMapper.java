@@ -7,10 +7,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
-    @Mapping(target = "authorId", source = "author_id")
+    @Mapping(target = "courses", ignore = true)
     AuthorDTO authorToAuthorDTO(Author author);
-
-
-    @Mapping(target = "author_id", source = "authorId")
+    @Mapping(target = "courses", ignore = true)
     Author authorDTOToAuthor(AuthorDTO authorDTO);
 }

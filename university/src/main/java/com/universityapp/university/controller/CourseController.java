@@ -31,7 +31,7 @@ public class CourseController {
 
     // Get course by ID
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> getCourseById(@PathVariable @Valid int id) {
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable int id) {
         CourseDTO course = courseService.getCourseById(id);
         return ResponseEntity.ok(course);
     }

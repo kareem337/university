@@ -43,7 +43,7 @@ class AuthorControllerTest {
         objectMapper = new ObjectMapper();
 
         authorDTO = new AuthorDTO();
-        authorDTO.setAuthorId(1);
+
         authorDTO.setName("kareem");
         authorDTO.setEmail("kareem@gmail.com");
         authorDTO.setBirthdate("9/7/2000");
@@ -57,7 +57,6 @@ class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].authorId").value(authorDTO.getAuthorId()))
                 .andExpect(jsonPath("$[0].name").value(authorDTO.getName()))
                 .andExpect(jsonPath("$[0].email").value(authorDTO.getEmail()))
                 .andExpect(jsonPath("$[0].birthdate").value(authorDTO.getBirthdate()));
@@ -73,7 +72,6 @@ class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.authorId").value(authorDTO.getAuthorId()))
                 .andExpect(jsonPath("$.name").value(authorDTO.getName()))
                 .andExpect(jsonPath("$.email").value(authorDTO.getEmail()))
                 .andExpect(jsonPath("$.birthdate").value(authorDTO.getBirthdate()));
@@ -90,7 +88,6 @@ class AuthorControllerTest {
                         .content(objectMapper.writeValueAsString(authorDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.authorId").value(authorDTO.getAuthorId()))
                 .andExpect(jsonPath("$.name").value(authorDTO.getName()))
                 .andExpect(jsonPath("$.email").value(authorDTO.getEmail()))
                 .andExpect(jsonPath("$.birthdate").value(authorDTO.getBirthdate()));
@@ -107,7 +104,6 @@ class AuthorControllerTest {
                         .content(objectMapper.writeValueAsString(authorDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.authorId").value(authorDTO.getAuthorId()))
                 .andExpect(jsonPath("$.name").value(authorDTO.getName()))
                 .andExpect(jsonPath("$.email").value(authorDTO.getEmail()))
                 .andExpect(jsonPath("$.birthdate").value(authorDTO.getBirthdate()));
@@ -134,7 +130,6 @@ class AuthorControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.authorId").value(authorDTO.getAuthorId()))
                 .andExpect(jsonPath("$.name").value(authorDTO.getName()))
                 .andExpect(jsonPath("$.email").value(authorDTO.getEmail()))
                 .andExpect(jsonPath("$.birthdate").value(authorDTO.getBirthdate()));

@@ -30,7 +30,6 @@ class AuthorMapperTest {
         AuthorDTO authorDTO = authorMapper.authorToAuthorDTO(author);
 
         // Then
-        assertEquals(1, authorDTO.getAuthorId());
         assertEquals("kareem", authorDTO.getName());
         assertEquals("kareem@gmail.com", authorDTO.getEmail());
         assertEquals("9/7/2000", authorDTO.getBirthdate());
@@ -40,7 +39,6 @@ class AuthorMapperTest {
     void testAuthorDTOToAuthor() {
         // Given
         AuthorDTO authorDTO = new AuthorDTO();
-        authorDTO.setAuthorId(1);
         authorDTO.setName("kareem");
         authorDTO.setEmail("kareem@gmail.com");
         authorDTO.setBirthdate("9/7/2000");
@@ -49,7 +47,6 @@ class AuthorMapperTest {
         Author author = authorMapper.authorDTOToAuthor(authorDTO);
 
         // Then
-        assertEquals(1, author.getAuthor_id());
         assertEquals("kareem", author.getName());
         assertEquals("kareem@gmail.com", author.getEmail());
         assertEquals("9/7/2000", author.getBirthdate());

@@ -2,12 +2,10 @@ package com.universityapp.university.service;
 
 import com.universityapp.university.dto.CourseDTO;
 import com.universityapp.university.entity.Course;
-import com.universityapp.university.exception.AuthorNotFoundException;
 import com.universityapp.university.exception.CourseNotFoundException;
 import com.universityapp.university.exception.InvalidDataException;
 import com.universityapp.university.exception.InvalidPaginationException;
 import com.universityapp.university.mapper.CourseMapper;
-import com.universityapp.university.repository.AuthorRepository;
 import com.universityapp.university.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,13 +20,13 @@ import java.util.stream.Collectors;
 public class CourseService {
 
     private final CourseRepository courseRepository;
-    private final AuthorRepository authorRepository;
+
     private final CourseMapper courseMapper;
 
     @Autowired
-    public CourseService(CourseRepository courseRepository, AuthorRepository authorRepository, CourseMapper courseMapper) {
+    public CourseService(CourseRepository courseRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
-        this.authorRepository = authorRepository;
+
         this.courseMapper = courseMapper;
     }
 
@@ -55,9 +53,6 @@ public class CourseService {
         if (courseDTO.getCredit() <= 0) {
             throw new InvalidDataException("Credit must be greater than 0.");
         }
-        if (!authorRepository.existsById(courseDTO.getAuthorId())) {
-            throw new InvalidDataException("Author ID does not exist.");
-        }
         Course course = courseMapper.dtoToCourse(courseDTO);
         Course savedCourse = courseRepository.save(course);
         return courseMapper.courseToCourseDTO(savedCourse);
@@ -72,14 +67,6 @@ public class CourseService {
         }
         if (updatedCourseDTO.getDescription() != null) {
             course.setDescription(updatedCourseDTO.getDescription());
-        }
-        if (updatedCourseDTO.getAuthorId() > 0) {
-            // Validate if the author exists (assuming an authorRepository exists)
-            if (authorRepository.existsById(updatedCourseDTO.getAuthorId())) {
-                course.setAuthor_id(updatedCourseDTO.getAuthorId());
-            } else {
-                throw new AuthorNotFoundException("Author not found with id: " + updatedCourseDTO.getAuthorId());
-            }
         }
         if (updatedCourseDTO.getCredit() > 0) {
             course.setCredit(updatedCourseDTO.getCredit());

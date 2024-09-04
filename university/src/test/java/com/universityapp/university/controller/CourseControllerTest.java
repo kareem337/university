@@ -34,11 +34,9 @@ class CourseControllerTest {
     @BeforeEach
     void setUp() {
         courseDTO = new CourseDTO();
-        courseDTO.setCourseId(1);
         courseDTO.setName("Math");
         courseDTO.setDescription("Math by Kareem");
         courseDTO.setCredit(2);
-        courseDTO.setAuthorId(1);
     }
 
     @Test
@@ -75,11 +73,11 @@ class CourseControllerTest {
     void testUpdateCourse() throws Exception {
         // Arrange
         CourseDTO updatedCourseDTO = new CourseDTO();
-        updatedCourseDTO.setCourseId(1);
+
         updatedCourseDTO.setName("Math Updated");
         updatedCourseDTO.setDescription("Updated Description");
         updatedCourseDTO.setCredit(3);
-        updatedCourseDTO.setAuthorId(1);
+
 
         when(courseService.updateCourse(anyInt(), any(CourseDTO.class))).thenReturn(updatedCourseDTO);
 

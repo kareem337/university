@@ -54,14 +54,14 @@ class CourseServiceTest {
         course.setName("Math");
         course.setDescription("Math by kareem");
         course.setCredit(2);
-        course.setAuthor_id(1);
+
 
         courseDTO = new CourseDTO();
-        courseDTO.setCourseId(1);
+
         courseDTO.setName("Math");
         courseDTO.setDescription("Math by kareem");
         courseDTO.setCredit(2);
-        courseDTO.setAuthorId(1);
+
     }
 
     @Test
@@ -135,71 +135,37 @@ class CourseServiceTest {
         assertEquals("Credit must be greater than 0.", exception.getMessage());
     }
 
-    @Test
-    void testCreateCourse_AuthorNotFound() {
-        when(authorRepository.existsById(anyInt())).thenReturn(false);
-
-        Exception exception = assertThrows(InvalidDataException.class, () -> {
-            courseService.createCourse(courseDTO);
-        });
-
-        assertEquals("Author ID does not exist.", exception.getMessage());
-    }
-
-    @Test
-    void testCreateCourse() {
-        when(authorRepository.existsById(anyInt())).thenReturn(true);
-        lenient().when(courseMapper.dtoToCourse(any(CourseDTO.class))).thenReturn(course);
-        lenient().when(courseRepository.save(any(Course.class))).thenReturn(course);
-        lenient().when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
-
-        CourseDTO savedCourseDTO = courseService.createCourse(courseDTO);
-
-        assertNotNull(savedCourseDTO);
-        assertEquals(courseDTO.getName(), savedCourseDTO.getName());
-        verify(courseRepository, times(1)).save(any(Course.class));
-    }
-
-    @Test
-    void testUpdateCourse_AuthorNotFound() {
-
-        int courseId = 1;
-        CourseDTO updatedCourseDTO = new CourseDTO();
-        updatedCourseDTO.setName("Updated Math");
-        updatedCourseDTO.setDescription("Updated Description");
-        updatedCourseDTO.setCredit(3);
-        updatedCourseDTO.setAuthorId(999);
-
-
-        when(courseRepository.findById(courseId)).thenReturn(Optional.of(course));
-        when(authorRepository.existsById(anyInt())).thenReturn(false);
-
-
-        Exception exception = assertThrows(AuthorNotFoundException.class, () -> {
-            courseService.updateCourse(courseId, updatedCourseDTO);
-        });
-
-        assertEquals("Author not found with id: 999", exception.getMessage());
-        verify(courseRepository, times(1)).findById(courseId);
-        verify(authorRepository, times(1)).existsById(999);
-        verify(courseRepository, never()).save(any(Course.class));
-    }
 
 
     @Test
-    void testUpdateCourse() {
-        when(authorRepository.existsById(anyInt())).thenReturn(true);
-        when(courseRepository.findById(anyInt())).thenReturn(Optional.of(course));
+    void testCreateCourse_Success() {
+        when(courseMapper.dtoToCourse(any(CourseDTO.class))).thenReturn(course);
         when(courseRepository.save(any(Course.class))).thenReturn(course);
         when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
 
-        CourseDTO updatedCourseDTO = courseService.updateCourse(1, courseDTO);
+        CourseDTO result = courseService.createCourse(courseDTO);
 
-        assertNotNull(updatedCourseDTO);
-        assertEquals(courseDTO.getName(), updatedCourseDTO.getName());
-        verify(courseRepository, times(1)).findById(1);
-        verify(courseRepository, times(1)).save(any(Course.class));
+        assertNotNull(result);
+        assertEquals(courseDTO.getName(), result.getName());
+        assertEquals(courseDTO.getDescription(), result.getDescription());
+        assertEquals(courseDTO.getCredit(), result.getCredit());
     }
+
+    @Test
+    void testUpdateCourse_Success() {
+        int courseId = 1;
+        when(courseRepository.findById(courseId)).thenReturn(Optional.of(course));
+        when(courseRepository.save(any(Course.class))).thenReturn(course);
+        when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
+
+        CourseDTO result = courseService.updateCourse(courseId, courseDTO);
+
+        assertNotNull(result);
+        assertEquals(courseDTO.getName(), result.getName());
+        assertEquals(courseDTO.getDescription(), result.getDescription());
+        assertEquals(courseDTO.getCredit(), result.getCredit());
+    }
+
     @Test
     void testDeleteCourse() {
         when(courseRepository.existsById(anyInt())).thenReturn(true);

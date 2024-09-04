@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-27T20:32:13+0300",
+    date = "2024-09-04T13:22:02+0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 22.0.2 (Oracle Corporation)"
 )
 @Component
@@ -21,7 +21,6 @@ public class AuthorMapperImpl implements AuthorMapper {
 
         AuthorDTO authorDTO = new AuthorDTO();
 
-        authorDTO.setAuthorId( author.getAuthor_id() );
         authorDTO.setName( author.getName() );
         authorDTO.setEmail( author.getEmail() );
         authorDTO.setBirthdate( author.getBirthdate() );
@@ -37,7 +36,6 @@ public class AuthorMapperImpl implements AuthorMapper {
 
         Author author = new Author();
 
-        author.setAuthor_id( authorDTO.getAuthorId() );
         author.setName( authorDTO.getName() );
         author.setEmail( authorDTO.getEmail() );
         author.setBirthdate( authorDTO.getBirthdate() );
