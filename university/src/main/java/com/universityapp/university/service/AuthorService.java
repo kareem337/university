@@ -53,6 +53,7 @@ public class AuthorService {
     }
 
     public AuthorDTO updateAuthor(int id, AuthorDTO updatedAuthorDTO) {
+
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new AuthorNotFoundException("Author not found with id: " + id));
 

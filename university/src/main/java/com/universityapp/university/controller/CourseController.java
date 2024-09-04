@@ -64,4 +64,10 @@ public class CourseController {
         Page<CourseDTO> coursePage = courseService.getCoursesWithPagination(page, size);
         return ResponseEntity.ok(coursePage);
     }
+
+    @PostMapping("/{courseId}/assign/{authorId}")
+    public ResponseEntity<Void> assignCourseToAuthor(@PathVariable int courseId, @PathVariable int authorId) {
+        courseService.assignCourseToAuthor(courseId, authorId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
