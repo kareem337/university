@@ -46,11 +46,11 @@ public class AuthorService {
     }
 
     public AuthorDTO updateAuthor(int id, AuthorDTO updatedAuthorDTO) {
-        // Fetch the existing author from the repository
+
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
 
-        // Update only the fields that are present in the updatedAuthorDTO
+
         if (updatedAuthorDTO.getName() != null) {
             author.setName(updatedAuthorDTO.getName());
         }
@@ -61,10 +61,10 @@ public class AuthorService {
             author.setBirthdate(updatedAuthorDTO.getBirthdate());
         }
 
-        // Save the updated author back to the repository
+
         Author updatedAuthor = authorRepository.save(author);
 
-        // Convert the updated author to DTO and return
+
         return authorMapper.authorToAuthorDTO(updatedAuthor);
     }
 

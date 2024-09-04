@@ -1,34 +1,27 @@
 package com.universityapp.university.dto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class AuthorDTO {
 
-    private int authorId;
     private String name;
     private String email;
     private String birthdate;
 
-
-    public AuthorDTO() {}
-
-    public AuthorDTO(int authorId, String name, String birthdate, String email) {
-        this.authorId = authorId;
-        this.name = name;
-        this.birthdate = birthdate;
-        this.email = email;
-
+    public Set<CourseDTO> getCourses() {
+        return courses;
     }
 
-    // Getters and setters
-
-    public int getAuthorId() {
-        return authorId;
+    public void setCourses(Set<CourseDTO> courses) {
+        this.courses = courses;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+    private Set<CourseDTO> courses;
+    public AuthorDTO() {
+        this.courses = new HashSet<>();
     }
+
 
     public String getName() {
         return name;
