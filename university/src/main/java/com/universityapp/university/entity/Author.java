@@ -30,7 +30,7 @@ public class Author {
         this.email = email;
     }
 
-    // Getters and setters
+
 
     public int getAuthor_id() {
         return author_id;

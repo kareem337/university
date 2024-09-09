@@ -18,9 +18,9 @@ public class SwaggerConfiguration {
                         .version("1.0")
                         .description("API for managing university courses and authors")
                         .contact(new Contact()
-                                .name("Your Name")
-                                .email("your.email@example.com")
-                                .url("https://your-website.com")));
+                                .name("Kareem")
+                                .email("karimyasser337@gmail.com")
+                                .url("https://sumerge.com")));
     }
 
     @Bean

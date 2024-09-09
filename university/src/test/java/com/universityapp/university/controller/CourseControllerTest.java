@@ -1,6 +1,7 @@
 package com.universityapp.university.controller;
 
 import com.universityapp.university.dto.CourseDTO;
+import com.universityapp.university.exception.CourseNotFoundException;
 import com.universityapp.university.service.CourseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,7 @@ class CourseControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Math by Kareem"));
     }
 
+
     @Test
     void testGetAllCourses() throws Exception {
         when(courseService.getAllCourses()).thenReturn(Arrays.asList(courseDTO));
@@ -70,8 +72,19 @@ class CourseControllerTest {
     }
 
     @Test
+    void testGetCourseByIdNotFound() throws Exception {
+
+        when(courseService.getCourseById(anyInt())).thenThrow(new CourseNotFoundException("Course not found"));
+
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/courses/{id}", 999))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+
+    @Test
     void testUpdateCourse() throws Exception {
-        // Arrange
+
         CourseDTO updatedCourseDTO = new CourseDTO();
 
         updatedCourseDTO.setName("Math Updated");

@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CourseMapper {
 
-    @Mapping(target = "authors", ignore = true) //to ignore the looping between course and author sets because the many to many relation
+    @Mapping(target = "authors", ignore = true)
     CourseDTO courseToCourseDTO(Course course);
     @Mapping(target = "authors", ignore = true)
     Course dtoToCourse(CourseDTO courseDto);

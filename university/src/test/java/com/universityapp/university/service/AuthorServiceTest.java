@@ -152,10 +152,10 @@ class AuthorServiceTest {
 
     @Test
     void testGetAuthorByEmail_NotFound() {
-        // Arrange
+
         when(authorRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-        // Act & Assert
+
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             authorService.getAuthorByEmail("kareem@gmail.com");
         });

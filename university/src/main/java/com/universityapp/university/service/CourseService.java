@@ -69,11 +69,19 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + id));
 
-        if (updatedCourseDTO.getName() != null && !updatedCourseDTO.getName().isEmpty()) {
-            course.setName(updatedCourseDTO.getName());
+        if (updatedCourseDTO.getName() != null) {
+            if( updatedCourseDTO.getName().isEmpty())
+            {
+                throw new InvalidDataException("Course name cannot be empty.");
+            }
+            else{ course.setName(updatedCourseDTO.getName()); }
         }
         if (updatedCourseDTO.getDescription() != null) {
-            course.setDescription(updatedCourseDTO.getDescription());
+            if(updatedCourseDTO.getDescription().isEmpty())
+            {
+                throw new InvalidDataException("Course description cannot be empty.");
+            }
+           else{ course.setDescription(updatedCourseDTO.getDescription()); }
         }
         if (updatedCourseDTO.getCredit() > 0) {
             course.setCredit(updatedCourseDTO.getCredit());

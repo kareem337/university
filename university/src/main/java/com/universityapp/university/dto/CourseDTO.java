@@ -11,16 +11,12 @@ import java.util.Set;
 
 public class CourseDTO {
 
-
-
-    @NotEmpty(message = "Course name cannot be empty")
     @Size(max = 100, message = "Course name cannot exceed 100 characters")
     private String name;
 
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
 
-    @Min(value = 1, message = "Credit must be at least 1")
     private int credit;
     @JsonIgnore
     private Set<AuthorDTO> authors;

@@ -2,6 +2,7 @@ package com.universityapp.university.controller;
 
 import com.universityapp.university.dto.AuthorDTO;
 import com.universityapp.university.service.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,14 +37,14 @@ public class AuthorController {
 
     // Create a new author
     @PostMapping
-    public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO author) {
+    public ResponseEntity<AuthorDTO> createAuthor(@Valid @RequestBody AuthorDTO author) {
         AuthorDTO createdAuthor = authorService.createAuthor(author);
         return new ResponseEntity<>(createdAuthor, HttpStatus.CREATED);
     }
 
     // Update an existing author
     @PutMapping("/{id}")
-    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable int id, @RequestBody AuthorDTO updatedAuthor) {
+    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable int id,@Valid @RequestBody AuthorDTO updatedAuthor) {
         AuthorDTO author = authorService.updateAuthor(id, updatedAuthor);
         return new ResponseEntity<>(author, HttpStatus.OK);
     }

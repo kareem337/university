@@ -2,12 +2,10 @@ package com.universityapp.university.service;
 
 import com.universityapp.university.dto.CourseDTO;
 import com.universityapp.university.entity.Course;
-import com.universityapp.university.exception.AuthorNotFoundException;
 import com.universityapp.university.exception.CourseNotFoundException;
 import com.universityapp.university.exception.InvalidDataException;
 import com.universityapp.university.exception.InvalidPaginationException;
 import com.universityapp.university.mapper.CourseMapper;
-import com.universityapp.university.repository.AuthorRepository;
 import com.universityapp.university.repository.CourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +32,6 @@ class CourseServiceTest {
 
     @Mock
     private CourseRepository courseRepository;
-
-    @Mock
-    private AuthorRepository authorRepository;
 
     @Mock
     private CourseMapper courseMapper;
@@ -86,6 +81,8 @@ class CourseServiceTest {
 
         assertNotNull(foundCourseDTO);
         assertEquals("Math", foundCourseDTO.getName());
+        assertEquals("Math by kareem", foundCourseDTO.getDescription());
+        assertEquals(2, foundCourseDTO.getCredit());
         verify(courseRepository, times(1)).findById(1);
     }
 
@@ -143,12 +140,12 @@ class CourseServiceTest {
         when(courseRepository.save(any(Course.class))).thenReturn(course);
         when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
 
-        CourseDTO result = courseService.createCourse(courseDTO);
+        CourseDTO createdCourse = courseService.createCourse(courseDTO);
 
-        assertNotNull(result);
-        assertEquals(courseDTO.getName(), result.getName());
-        assertEquals(courseDTO.getDescription(), result.getDescription());
-        assertEquals(courseDTO.getCredit(), result.getCredit());
+        assertNotNull(createdCourse);
+        assertEquals(courseDTO.getName(), createdCourse.getName());
+        assertEquals(courseDTO.getDescription(), createdCourse.getDescription());
+        assertEquals(courseDTO.getCredit(), createdCourse.getCredit());
     }
 
     @Test
@@ -181,7 +178,7 @@ class CourseServiceTest {
     void testDeleteCourse_NotFound() {
         when(courseRepository.existsById(anyInt())).thenReturn(false);
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> {
             courseService.deleteCourse(1);
         });
 
@@ -190,26 +187,22 @@ class CourseServiceTest {
         verify(courseRepository, never()).deleteById(anyInt());
     }
 
+
     @Test
     void testGetCoursesWithPagination_InvalidPagination() {
-
-        Exception pageException = assertThrows(InvalidPaginationException.class, () -> {
+        assertThrows(InvalidPaginationException.class, () -> {
             courseService.getCoursesWithPagination(-1, 10);
-        });
-        assertEquals("Page and page size must be greater than or equal to 0.", pageException.getMessage());
+        }, "Page and page size must be greater than or equal to 0.");
 
-
-        Exception sizeException = assertThrows(InvalidPaginationException.class, () -> {
+        assertThrows(InvalidPaginationException.class, () -> {
             courseService.getCoursesWithPagination(0, 0);
-        });
-        assertEquals("Page and page size must be greater than or equal to 0.", sizeException.getMessage());
+        }, "Page and page size must be greater than or equal to 0.");
 
-
-        Exception bothException = assertThrows(InvalidPaginationException.class, () -> {
+        assertThrows(InvalidPaginationException.class, () -> {
             courseService.getCoursesWithPagination(-1, -1);
-        });
-        assertEquals("Page and page size must be greater than or equal to 0.", bothException.getMessage());
+        }, "Page and page size must be greater than or equal to 0.");
     }
+
 
     @Test
     void testGetCoursesWithPagination() {
