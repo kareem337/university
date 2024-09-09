@@ -1,6 +1,8 @@
 package com.universityapp.university.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 import java.util.HashSet;
@@ -8,6 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "author")
+@Data
+@NoArgsConstructor
 public class Author {
 
     @Id
@@ -20,56 +24,4 @@ public class Author {
 
     @ManyToMany(mappedBy = "authors")
     private Set<Course> courses = new HashSet<>();
-
-    public Author() {}
-
-    public Author(int author_id, String name, String birthdate, String email) {
-        this.author_id = author_id;
-        this.name = name;
-        this.birthdate = birthdate;
-        this.email = email;
-    }
-
-
-
-    public int getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(int author_id) {
-        this.author_id = author_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
 }
-

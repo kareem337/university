@@ -1,9 +1,15 @@
 package com.universityapp.university.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "author_course")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthorCourse {
 
     @Id
@@ -17,5 +23,4 @@ public class AuthorCourse {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-
 }
