@@ -42,14 +42,10 @@ class CourseControllerTest {
 
     @Test
     void testCreateCourse() throws Exception {
-        when(courseService.createCourse(any(CourseDTO.class))).thenReturn(courseDTO);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/courses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"courseId\":1,\"name\":\"Math\",\"description\":\"Math by Kareem\",\"credit\":2,\"authorId\":1}"))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Math"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Math by Kareem"));
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
 

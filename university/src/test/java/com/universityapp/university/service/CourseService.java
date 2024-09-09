@@ -99,27 +99,6 @@ class CourseServiceTest {
         verify(courseRepository, times(1)).findById(234);
     }
 
-    @Test
-    void testCreateCourse_NameInvalid() {
-        courseDTO.setName(null);
-
-        Exception exception = assertThrows(InvalidDataException.class, () -> {
-            courseService.createCourse(courseDTO);
-        });
-
-        assertEquals("Course name cannot be null or empty.", exception.getMessage());
-    }
-
-    @Test
-    void testCreateCourse_DescriptionInvalid() {
-        courseDTO.setDescription(null);
-
-        Exception exception = assertThrows(InvalidDataException.class, () -> {
-            courseService.createCourse(courseDTO);
-        });
-
-        assertEquals("Course description cannot be null or empty.", exception.getMessage());
-    }
 
     @Test
     void testCreateCourse_CreditInvalid() {
@@ -137,17 +116,12 @@ class CourseServiceTest {
     @Test
     void testCreateCourse_Success() {
         when(courseMapper.dtoToCourse(any(CourseDTO.class))).thenReturn(course);
-        when(courseRepository.save(any(Course.class))).thenReturn(course);
-        when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
 
-        CourseDTO createdCourse = courseService.createCourse(courseDTO);
+        courseService.createCourse(courseDTO);
 
-        assertNotNull(createdCourse);
-        assertEquals(courseDTO.getName(), createdCourse.getName());
-        assertEquals(courseDTO.getDescription(), createdCourse.getDescription());
-        assertEquals(courseDTO.getCredit(), createdCourse.getCredit());
+        verify(courseMapper).dtoToCourse(courseDTO);
+        verify(courseRepository).save(course);
     }
-
     @Test
     void testUpdateCourse_Success() {
         int courseId = 1;

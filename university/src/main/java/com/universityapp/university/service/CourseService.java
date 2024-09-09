@@ -50,19 +50,12 @@ public class CourseService {
                 .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + id));
     }
 
-    public CourseDTO createCourse(CourseDTO courseDTO) {
-        if (courseDTO.getName() == null || courseDTO.getName().isEmpty()) {
-            throw new InvalidDataException("Course name cannot be null or empty.");
-        }
-        if (courseDTO.getDescription() == null || courseDTO.getDescription().isEmpty()) {
-            throw new InvalidDataException("Course description cannot be null or empty.");
-        }
+    public void createCourse(CourseDTO courseDTO) {
         if (courseDTO.getCredit() <= 0) {
             throw new InvalidDataException("Credit must be greater than 0.");
         }
         Course course = courseMapper.dtoToCourse(courseDTO);
-        Course savedCourse = courseRepository.save(course);
-        return courseMapper.courseToCourseDTO(savedCourse);
+        courseRepository.save(course);
     }
 
     public CourseDTO updateCourse(int id, CourseDTO updatedCourseDTO) {
@@ -70,19 +63,11 @@ public class CourseService {
                 .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + id));
 
         if (updatedCourseDTO.getName() != null) {
-            if( updatedCourseDTO.getName().isEmpty())
-            {
-                throw new InvalidDataException("Course name cannot be empty.");
-            }
-            else{ course.setName(updatedCourseDTO.getName()); }
-        }
+course.setName(updatedCourseDTO.getName()); }
+
         if (updatedCourseDTO.getDescription() != null) {
-            if(updatedCourseDTO.getDescription().isEmpty())
-            {
-                throw new InvalidDataException("Course description cannot be empty.");
-            }
-           else{ course.setDescription(updatedCourseDTO.getDescription()); }
-        }
+  course.setDescription(updatedCourseDTO.getDescription()); }
+
         if (updatedCourseDTO.getCredit() > 0) {
             course.setCredit(updatedCourseDTO.getCredit());
         } else if (updatedCourseDTO.getCredit() < 0) {
