@@ -3,6 +3,7 @@ package com.universityapp.university.service;
 import com.universityapp.university.dto.CourseDTO;
 import com.universityapp.university.entity.Author;
 import com.universityapp.university.entity.Course;
+import com.universityapp.university.exception.AuthorNotFoundException;
 import com.universityapp.university.exception.CourseNotFoundException;
 import com.universityapp.university.exception.InvalidDataException;
 import com.universityapp.university.exception.InvalidPaginationException;
@@ -28,7 +29,7 @@ public class CourseService {
 
     private final CourseMapper courseMapper;
 
-    @Autowired
+
     public CourseService(CourseRepository courseRepository, AuthorRepository authorRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
 
@@ -98,10 +99,10 @@ course.setName(updatedCourseDTO.getName()); }
 
     public void assignCourseToAuthor(int courseId, int authorId) {
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
+                .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + courseId));
 
         Author author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("Author not found with id: " + authorId));
+                .orElseThrow(() -> new AuthorNotFoundException("Author not found with id: " + authorId));
 
         author.getCourses().add(course);
         course.getAuthors().add(author);
