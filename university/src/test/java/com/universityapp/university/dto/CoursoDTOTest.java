@@ -17,20 +17,20 @@ class CourseDTOTest {
 
     @BeforeEach
     void setUp() {
-        // Initialize the validator
+
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
     @Test
     void testValidCourseDTO() {
-        // Given
+
         CourseDTO courseDTO = new CourseDTO();
         courseDTO.setName("Introduction to Programming");
         courseDTO.setDescription("A beginner's course in programming.");
         courseDTO.setCredit(3);
 
-        // When
+
         Set<ConstraintViolation<CourseDTO>> violations = validator.validate(courseDTO);
 
         // Then
@@ -39,29 +39,29 @@ class CourseDTOTest {
 
     @Test
     void testCourseDTOWithEmptyName() {
-        // Given
+
         CourseDTO courseDTO = new CourseDTO();
         courseDTO.setName(""); // Invalid name
         courseDTO.setDescription("A beginner's course in programming.");
         courseDTO.setCredit(3);
 
-        // When
+
         Set<ConstraintViolation<CourseDTO>> violations = validator.validate(courseDTO);
 
-        // Then
+
         assertFalse(violations.isEmpty(), "There should be validation errors");
         assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("Course name cannot be empty")));
     }
 
     @Test
     void testCourseDTOWithLongDescription() {
-        // Given
+
         CourseDTO courseDTO = new CourseDTO();
         courseDTO.setName("Intro Programming");
         courseDTO.setDescription("A".repeat(501)); // Invalid description length
         courseDTO.setCredit(3);
 
-        // When
+
         Set<ConstraintViolation<CourseDTO>> violations = validator.validate(courseDTO);
 
         // Then

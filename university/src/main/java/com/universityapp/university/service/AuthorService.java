@@ -3,14 +3,13 @@ package com.universityapp.university.service;
 import com.universityapp.university.dto.AuthorDTO;
 import com.universityapp.university.entity.Author;
 import com.universityapp.university.exception.AuthorNotFoundException;
+import com.universityapp.university.exception.ErrorMessageUtil;
 import com.universityapp.university.exception.InvalidDataException;
 import com.universityapp.university.mapper.AuthorMapper;
 import com.universityapp.university.repository.AuthorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthorService {
@@ -28,12 +27,13 @@ public class AuthorService {
         List<Author> authors = authorRepository.findAll();
         return authors.stream()
                 .map(authorMapper::authorToAuthorDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
+
 
     public AuthorDTO getAuthorById(int id) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new AuthorNotFoundException("Author not found with id: " + id));
+                .orElseThrow(() -> new AuthorNotFoundException(ErrorMessageUtil.formatAuthorNotFoundMessage(id)));
         return authorMapper.authorToAuthorDTO(author);
     }
 
@@ -55,7 +55,7 @@ public class AuthorService {
     public AuthorDTO updateAuthor(int id, AuthorDTO updatedAuthorDTO) {
 
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new AuthorNotFoundException("Author not found with id: " + id));
+                .orElseThrow(() -> new AuthorNotFoundException(ErrorMessageUtil.formatAuthorNotFoundMessage(id)));
 
         if (updatedAuthorDTO.getName() != null && !updatedAuthorDTO.getName().isEmpty()) {
             author.setName(updatedAuthorDTO.getName());
@@ -73,17 +73,18 @@ public class AuthorService {
 
     public void deleteAuthor(int id) {
         if (!authorRepository.existsById(id)) {
-            throw new AuthorNotFoundException("Author not found with id: " + id);
+            throw new AuthorNotFoundException(ErrorMessageUtil.formatAuthorNotFoundMessage(id));
         }
         if (authorRepository.existsByAuthorId(id)) {
-            throw new InvalidDataException("Author cannot be deleted because it is assigned to one or more courses.");
+            throw new InvalidDataException(ErrorMessageUtil.AUTHOR_DELETION_INVALID_MESSAGE);
         }
         authorRepository.deleteById(id);
     }
 
     public AuthorDTO getAuthorByEmail(String email) {
         Author author = authorRepository.findByEmail(email)
-                .orElseThrow(() -> new AuthorNotFoundException("Author not found with email: " + email));
+                .orElseThrow(() -> new AuthorNotFoundException(ErrorMessageUtil.emailInvalidMessage(email)));
         return authorMapper.authorToAuthorDTO(author);
     }
+
 }

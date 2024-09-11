@@ -24,16 +24,14 @@ class AuthorDTOTest {
 
     @Test
     void testValidAuthorDTO() {
-        // Given
+
         AuthorDTO authorDTO = new AuthorDTO();
         authorDTO.setName("Jane Doe");
         authorDTO.setEmail("jane.doe@example.com");
         authorDTO.setBirthdate("1990-05-15");
 
-        // When
         Set<ConstraintViolation<AuthorDTO>> violations = validator.validate(authorDTO);
 
-        // Then
         assertTrue(violations.isEmpty(), "There should be no validation errors");
     }
 

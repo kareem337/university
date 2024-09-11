@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,7 @@ class CourseServiceTest {
 
     @Test
     void testGetAllCourses() {
-        when(courseRepository.findAll()).thenReturn(Arrays.asList(course));
+        when(courseRepository.findAll()).thenReturn(Collections.singletonList(course));
         when(courseMapper.courseToCourseDTO(any(Course.class))).thenReturn(courseDTO);
 
         List<CourseDTO> courseDTOs = courseService.getAllCourses();

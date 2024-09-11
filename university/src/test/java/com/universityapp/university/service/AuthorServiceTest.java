@@ -2,6 +2,7 @@ package com.universityapp.university.service;
 
 import com.universityapp.university.dto.AuthorDTO;
 import com.universityapp.university.entity.Author;
+import com.universityapp.university.exception.AuthorNotFoundException;
 import com.universityapp.university.mapper.AuthorMapper;
 import com.universityapp.university.repository.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -152,17 +153,14 @@ class AuthorServiceTest {
 
     @Test
     void testGetAuthorByEmail_NotFound() {
-
         when(authorRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            authorService.getAuthorByEmail("kareem@gmail.com");
+        RuntimeException exception = assertThrows(AuthorNotFoundException.class, () -> {
+            authorService.getAuthorByEmail("omar@gmail.com");
         });
 
-
-        assertEquals("Author not found with email: kareem@gmail.com", exception.getMessage());
-        verify(authorRepository, times(1)).findByEmail("kareem@gmail.com");
+        assertEquals("Author not found with email: omar@gmail.com", exception.getMessage());
     }
+
 
 }

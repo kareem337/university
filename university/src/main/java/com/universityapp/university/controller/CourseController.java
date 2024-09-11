@@ -60,7 +60,7 @@ public class CourseController {
     public ResponseEntity<Page<CourseDTO>> getCoursesWithPagination(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<CourseDTO> coursePage = courseService.getCoursesWithPagination(page, size);
+        Page<CourseDTO> coursePage = courseService.getCoursesWithPagination(page - 1, size);
         return ResponseEntity.ok(coursePage);
     }
 
